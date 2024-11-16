@@ -2,9 +2,17 @@ import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Phone } from "lucide-react";
+import { forwardRef, useImperativeHandle } from "react";
 
-export default function StartCall() {
+const StartCall = forwardRef<{ connect: () => Promise<void> }, {}>(function StartCall(_, ref) {
   const { status, connect } = useVoice();
+
+  useImperativeHandle(ref, () => ({
+    connect: () => connect()
+      .then(() => {})
+      .catch(() => {})
+      .finally(() => {})
+  }));
 
   return (
     <AnimatePresence>
@@ -52,4 +60,6 @@ export default function StartCall() {
       ) : null}
     </AnimatePresence>
   );
-}
+});
+
+export default StartCall;
